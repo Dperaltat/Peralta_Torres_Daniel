@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -23,8 +24,8 @@ public class Vehiculo implements Serializable {
 	private String placa;
 	private String marca;
 	private String modelo;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vehiculo")
-	private List<Ticket> telefonos = new ArrayList<Ticket>();
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "vehiculo")
+	private Ticket ticket;
 	@ManyToOne
 	@JoinColumn
 	private Cliente cliente;
@@ -33,12 +34,11 @@ public class Vehiculo implements Serializable {
 		
 	}
 	
-	public Vehiculo(String placa, String marca, String modelo, List<Ticket> telefonos, Cliente cliente) {
+	public Vehiculo(String placa, String marca, String modelo, Cliente cliente) {
 		super();
 		this.placa = placa;
 		this.marca = marca;
 		this.modelo = modelo;
-		this.telefonos = telefonos;
 		this.cliente = cliente;
 	}
 
@@ -66,12 +66,12 @@ public class Vehiculo implements Serializable {
 		this.modelo = modelo;
 	}
 
-	public List<Ticket> getTelefonos() {
-		return telefonos;
+	public Ticket getTicket() {
+		return ticket;
 	}
 
-	public void setTelefonos(List<Ticket> telefonos) {
-		this.telefonos = telefonos;
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
 	}
 
 	public Cliente getCliente() {
@@ -90,7 +90,7 @@ public class Vehiculo implements Serializable {
 		result = prime * result + ((marca == null) ? 0 : marca.hashCode());
 		result = prime * result + ((modelo == null) ? 0 : modelo.hashCode());
 		result = prime * result + ((placa == null) ? 0 : placa.hashCode());
-		result = prime * result + ((telefonos == null) ? 0 : telefonos.hashCode());
+		result = prime * result + ((ticket == null) ? 0 : ticket.hashCode());
 		return result;
 	}
 
@@ -123,20 +123,18 @@ public class Vehiculo implements Serializable {
 				return false;
 		} else if (!placa.equals(other.placa))
 			return false;
-		if (telefonos == null) {
-			if (other.telefonos != null)
+		if (ticket == null) {
+			if (other.ticket != null)
 				return false;
-		} else if (!telefonos.equals(other.telefonos))
+		} else if (!ticket.equals(other.ticket))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Vehiculo [placa=" + placa + ", marca=" + marca + ", modelo=" + modelo + ", telefonos=" + telefonos
+		return "Vehiculo [placa=" + placa + ", marca=" + marca + ", modelo=" + modelo + ", ticket=" + ticket
 				+ ", cliente=" + cliente + "]";
 	}
-	
 
-	
 }

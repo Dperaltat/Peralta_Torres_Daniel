@@ -23,19 +23,18 @@ public class Cliente implements Serializable {
 	private String direccion;
 	private String telefono;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-	private List<Vehiculo> telefonos = new ArrayList<Vehiculo>();
+	private List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
 	
 	public Cliente() {
 		
 	}
-	
-	public Cliente(String cedula, String nombre, String direccion, String telefono, List<Vehiculo> telefonos) {
+
+	public Cliente(String cedula, String nombre, String direccion, String telefono) {
 		super();
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.telefono = telefono;
-		this.telefonos = telefonos;
 	}
 
 	public String getCedula() {
@@ -70,12 +69,12 @@ public class Cliente implements Serializable {
 		this.telefono = telefono;
 	}
 
-	public List<Vehiculo> getTelefonos() {
-		return telefonos;
+	public List<Vehiculo> getVehiculos() {
+		return vehiculos;
 	}
 
-	public void setTelefonos(List<Vehiculo> telefonos) {
-		this.telefonos = telefonos;
+	public void setVehiculos(List<Vehiculo> vehiculos) {
+		this.vehiculos = vehiculos;
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class Cliente implements Serializable {
 		result = prime * result + ((direccion == null) ? 0 : direccion.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((telefono == null) ? 0 : telefono.hashCode());
-		result = prime * result + ((telefonos == null) ? 0 : telefonos.hashCode());
+		result = prime * result + ((vehiculos == null) ? 0 : vehiculos.hashCode());
 		return result;
 	}
 
@@ -119,10 +118,10 @@ public class Cliente implements Serializable {
 				return false;
 		} else if (!telefono.equals(other.telefono))
 			return false;
-		if (telefonos == null) {
-			if (other.telefonos != null)
+		if (vehiculos == null) {
+			if (other.vehiculos != null)
 				return false;
-		} else if (!telefonos.equals(other.telefonos))
+		} else if (!vehiculos.equals(other.vehiculos))
 			return false;
 		return true;
 	}
@@ -130,8 +129,7 @@ public class Cliente implements Serializable {
 	@Override
 	public String toString() {
 		return "Cliente [cedula=" + cedula + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono="
-				+ telefono + ", telefonos=" + telefonos + "]";
+				+ telefono + ", vehiculos=" + vehiculos + "]";
 	}
-	
-	
+
 }

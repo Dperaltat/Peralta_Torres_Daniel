@@ -25,7 +25,7 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 	
 	public JPAGenericDAO(Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
-		this.em = Persistence.createEntityManagerFactory("JPA").createEntityManager();
+		this.em = Persistence.createEntityManagerFactory("jpa").createEntityManager();
 	}
 
 	@Override
@@ -43,6 +43,19 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 		}
 		
 	}
+	
+	@Override
+	public void update(T entity) {
+		em.getTransaction().begin();
+		try {
+		    em.merge(entity);
+		    em.getTransaction().commit();
+		} catch (Exception e) {
+		    System.out.println(">>>> ERROR:JPAGenericDAO:update " + e);
+		    if (em.getTransaction().isActive())
+			em.getTransaction().rollback();
+		}
+	}
 
 	@Override
 	public void delete(T entity) {
@@ -59,6 +72,13 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 	}
 
 	@Override
+    public void deleteByID(ID id) {
+	T entity = this.read(id);
+	if (entity != null)
+	    this.delete(entity);
+    }
+	
+	@Override
 	public void createTable() {
 		// TODO Auto-generated method stub
 		
@@ -70,11 +90,6 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 		return null;
 	}
 
-	@Override
-	public void update(T entity) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public List<T> find() {
@@ -83,16 +98,14 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 	}
 
 	@Override
-	public void deleteByID(ID id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<Vehiculo> buscarCedula(String cedula) {
 		// TODO Auto-generated method stub
-		return null;
+		System.out.println("Consulta Realizada...");
+		Query nativeQuery = em.createNativeQuery("SELECT placa, marca, modelo, cliente_cedula, vehiculo_placa FROM cliente, vehiculo WHERE vehiculo.cliente_cedula=cliente.cedula and cliente.cedula=?", Vehiculo.class);
+		nativeQuery.setParameter(1, cedula);
+		return (List<Vehiculo>)nativeQuery.getResultList();
 	}
+	
 
 	@Override
 	public List<Ticket> buscarPlaca(String placa) {
