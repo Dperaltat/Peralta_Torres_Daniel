@@ -26,4 +26,8 @@ public interface GenericDAO<T, ID> {
 	
 	public List<Ticket> buscarPlaca(String placa);
 	
+	List<T> findAll();
+	
+	Cliente buscar(String cedula, String nombre);
+	
 }

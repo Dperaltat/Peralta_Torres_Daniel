@@ -101,7 +101,7 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 	public List<Vehiculo> buscarCedula(String cedula) {
 		// TODO Auto-generated method stub
 		System.out.println("Consulta Realizada...");
-		Query nativeQuery = em.createNativeQuery("SELECT placa, marca, modelo, cliente_cedula, vehiculo_placa FROM cliente, vehiculo WHERE vehiculo.cliente_cedula=cliente.cedula and cliente.cedula=?", Vehiculo.class);
+		Query nativeQuery = em.createNativeQuery("SELECT placa, marca, modelo, cliente_cedula, vehiculo_placa FROM cliente, vehiculo, ticket WHERE vehiculo.cliente_cedula=cliente.cedula and cliente.cedula=?", Vehiculo.class);
 		nativeQuery.setParameter(1, cedula);
 		return (List<Vehiculo>)nativeQuery.getResultList();
 	}
@@ -111,6 +111,30 @@ public class JPAGenericDAO<T, ID> implements GenericDAO<T, ID> {
 	public List<Ticket> buscarPlaca(String placa) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<T> findAll() {
+		em.getTransaction().begin();
+		List<T> lista = null;
+		try {
+			javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+			cq.select(cq.from(persistentClass));
+			lista = em.createQuery(cq).getResultList();
+			em.getTransaction().commit();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	@Override
+	public Cliente buscar(String cedula, String nombre) {
+		Query nativeQuery = em.createNativeQuery("SELECT * FROM cliente where cedula =? AND nombre=?", Cliente.class);
+		nativeQuery.setParameter(1, cedula);
+		nativeQuery.setParameter(2, nombre);
+		
+		return (Cliente) nativeQuery.getSingleResult();
 	}
 	
 }
